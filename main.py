@@ -40,3 +40,13 @@ def verify_user(request : Request):
             return JSONResponse({"message" : "Access granted"},200)
         return JSONResponse({"message" : f"Access denied ! You wrote {code} which is not correct"},403)
     return JSONResponse({"message" : "Access denied ! You did not write an authorization code"},403)
+
+class Code(BaseModel):
+    secret_code: int
+
+@app.post("/secret_code")
+def verify_code(code : Code):
+    secret_code_length = len(str(code.secret_code))
+    if secret_code_length != 4:
+        return JSONResponse({"message" : f"The given code does not contain 4 numbers, it has {secret_code_length} instead !"},400)
+    return JSONResponse({"message" : f"Access granted !"},200)
