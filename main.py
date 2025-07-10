@@ -35,6 +35,8 @@ def post_name(user_info : UserInfo):
 @app.post("/top_secret")
 def verify_user(request : Request):
     code = request.headers.get("Authorization")
-    if code == "my_secret_key":
-        return JSONResponse({"message" : "Access granted"},200)
-    return JSONResponse({"message" : "Access denied"},403)
+    if code is not None:
+        if code == "my_secret_key":
+            return JSONResponse({"message" : "Access granted"},200)
+        return JSONResponse({"message" : f"Access denied ! You wrote {code} which is not correct"},403)
+    return JSONResponse({"message" : "Access denied ! You did not write an authorization code"},403)
