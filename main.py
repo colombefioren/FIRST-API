@@ -16,7 +16,7 @@ def welcome_user(request : Request, name : str = "Guest", adult : bool = False):
         if adult :
             return JSONResponse({"message" : f"Hello {name}! You are a grownup!"},200)
         return JSONResponse({"message" : f"Hello {name}! You are not a grownup!"},200)
-    if adult :
+    if adult:
         return JSONResponse({"message" : f"Hello {name} ! You are a grownup!"},200)
     return JSONResponse({"message" : "Hello there !"},200)
 
@@ -30,3 +30,11 @@ def post_name(user_info : UserInfo):
         return JSONResponse({"message" : f"Hello {user_info.name}! You are a grownup!"},200)
     return JSONResponse({"message" : f"Hello {user_info.name}! You are not a grownup!"},200)
 
+
+
+@app.post("/top_secret")
+def verify_user(request : Request):
+    code = request.headers.get("Authorization")
+    if code == "my_secret_key":
+        return JSONResponse({"message" : "Access granted"},200)
+    return JSONResponse({"message" : "Access denied"},403)
